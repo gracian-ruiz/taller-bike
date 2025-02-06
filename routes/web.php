@@ -35,4 +35,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
+Route::get('/test-inertia', function () {
+    return Inertia::render('TestPage', [
+        'message' => 'Inertia está funcionando correctamente'
+    ]);
+});
+
+
 require __DIR__.'/auth.php';
