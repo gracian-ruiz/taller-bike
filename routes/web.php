@@ -36,10 +36,17 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::get('/test-inertia', function () {
-    return Inertia::render('TestPage', [
-        'message' => 'Inertia está funcionando correctamente y todo correcto'
-    ]);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/test-inertia', function () {
+        // Verifica si el usuario tiene el rol de 'admin'
+        if (!auth()->user()->hasRole('admin')) {
+            abort(403, 'Acceso denegado');
+        }
+        
+        return Inertia::render('TestPage', [
+            'message' => 'Inertia está funcionando correctamente y todo correcto'
+        ]);
+    });
 });
 
 
