@@ -19,6 +19,11 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): Response
     {
+        // Si el usuario ya está autenticado, lo redirigimos a su dashboard
+        if (Auth::check()) {
+            return redirect()->intended(RouteServiceProvider::HOME);
+        }
+
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
             'status' => session('status'),
@@ -34,7 +39,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // Enviamos los datos del usuario con sus roles a Inertia
+        return Inertia::location(RouteServiceProvider::HOME);
     }
 
     /**
@@ -45,7 +51,6 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');
