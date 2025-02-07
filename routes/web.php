@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/test-inertia', function () {
     return Inertia::render('TestPage', [
-        'message' => 'Inertia está funcionando correctamente'
+        'message' => 'Inertia está funcionando correctamente y todo correcto'
     ]);
 });
 
