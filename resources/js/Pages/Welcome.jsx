@@ -42,8 +42,9 @@ export default function Welcome({ auth }) {
 
                     {/* Descripción */}
                     <p className="mt-6 text-lg md:text-xl text-gray-600 dark:text-gray-400">
-                        Aquí podrá pedir cita para sus próximas revisiones, llevar un libro de mantenimiento
-                        de su bicicleta y saber cuándo será su próxima revisión.
+                        <h1>Aquí podrá pedir cita para sus próximas revisiones</h1>
+                        <h1>Llevar un libro de mantenimiento de su biciclet</h1>
+                        <h1>Saber cuándo será su próxima revisión</h1>
                     </p>
                 </div>
             </div>
