@@ -49,7 +49,6 @@ export default function CreateClient({ client, onClose }) {
         }
     };
     
-
     return (
         <div className="p-4 bg-gray-50 border rounded">
             <h2 className="text-xl font-bold mb-3">
