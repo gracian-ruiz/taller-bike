@@ -1,53 +1,72 @@
 import { useState } from "react";
+import { useForm, router } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
-import CreateClient from "./CreateClient"; // 🔹 Importamos el formulario
+import CreateClient from "./CreateClient"; // 👈 Importar correctamente
 
 export default function Index({ auth, users }) {
-    const roles = auth.roles || [];
-    const [showForm, setShowForm] = useState(false); // 🔹 Controlamos la vista
+    const [showForm, setShowForm] = useState(false);
+    const [editingClient, setEditingClient] = useState(null);
+
+    const handleEdit = (client) => {
+        console.log("Editando cliente:", client); // 🔹 Verificar en consola si pasa correctamente
+        setEditingClient(client);
+        setShowForm(true);
+    };
+
+    const handleDelete = (id) => {
+        if (confirm("¿Seguro que deseas eliminar este cliente?")) {
+            router.delete(route("clients.destroy", id));
+        }
+    };
 
     return (
-        <AuthenticatedLayout user={auth.user} roles={roles}>
-            <Head title="Clientes" />
-
+        <AuthenticatedLayout user={auth.user}>
             <div className="p-6 bg-white shadow-md rounded-md">
-                <div className="flex justify-between items-center mb-4">
-                    <h1 className="text-2xl font-bold">Gestión de Clientes</h1>
+                <h1 className="text-2xl font-bold mb-4">Gestión de Clientes</h1>
 
-                    {roles.includes("admin") && (
-                        <button
-                            onClick={() => setShowForm(!showForm)}
-                            className="bg-blue-500 text-white px-4 py-2 rounded"
-                        >
-                            {showForm ? "Ver Lista" : "Añadir Cliente"}
-                        </button>
-                    )}
-                </div>
+                <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded mb-4"
+                    onClick={() => {
+                        setEditingClient(null); // Resetea para añadir un nuevo
+                        setShowForm(true);
+                    }}
+                >
+                    Añadir Cliente
+                </button>
 
-                {/* 🔹 Muestra el Formulario o la Tabla */}
-                {showForm ? (
-                    <CreateClient onClose={() => setShowForm(false)} />
-                ) : (
-                    <table className="min-w-full bg-white border border-gray-200">
-                        <thead>
-                            <tr className="bg-gray-100">
-                                <th className="py-2 px-4 border">ID</th>
-                                <th className="py-2 px-4 border">Nombre</th>
-                                <th className="py-2 px-4 border">Email</th>
+                {showForm && <CreateClient client={editingClient} onClose={() => setShowForm(false)} />} {/* 🔹 Aquí pasamos los datos si es edición */}
+
+                <table className="w-full border-collapse border border-gray-300 mt-4">
+                    <thead>
+                        <tr className="bg-gray-100">
+                            <th className="border border-gray-300 p-2">Nombre</th>
+                            <th className="border border-gray-300 p-2">Email</th>
+                            <th className="border border-gray-300 p-2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.map((user) => (
+                            <tr key={user.id}>
+                                <td className="border border-gray-300 p-2">{user.name}</td>
+                                <td className="border border-gray-300 p-2">{user.email}</td>
+                                <td className="border border-gray-300 p-2 flex space-x-2">
+                                    <button
+                                        className="bg-yellow-500 text-white px-2 py-1 rounded"
+                                        onClick={() => handleEdit(user)}
+                                    >
+                                        Editar
+                                    </button>
+                                    <button
+                                        className="bg-red-500 text-white px-2 py-1 rounded"
+                                        onClick={() => handleDelete(user.id)}
+                                    >
+                                        Eliminar
+                                    </button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            {users.map((user) => (
-                                <tr key={user.id} className="text-center">
-                                    <td className="py-2 px-4 border">{user.id}</td>
-                                    <td className="py-2 px-4 border">{user.name}</td>
-                                    <td className="py-2 px-4 border">{user.email}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </AuthenticatedLayout>
     );

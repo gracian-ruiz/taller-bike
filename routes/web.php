@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/clients', [UserController::class, 'index'])->name('clients.index');
     Route::post('/clients', [UserController::class, 'store'])->name('clients.store');
+    Route::put('/clients/{user}', [UserController::class, 'update'])->name('clients.update');
+    Route::delete('/clients/{user}', [UserController::class, 'destroy'])->name('clients.destroy');
 });
 
 

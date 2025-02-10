@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\StoreUserRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
 {
@@ -17,25 +20,18 @@ class UserController extends Controller
     {
         return Inertia::render('Users/Index', [
             'auth' => [
-                'user' => auth()->user(),
-                'roles' => auth()->user()->roles->pluck('name')->toArray(), // ✅ Ahora pasamos roles
+                'user' => Auth::user(),
+                'roles' => Auth::user()->roles->pluck('name')->toArray() ?? [],
             ],
-            'users' => User::select('id', 'name', 'email', 'created_at')->get(),
+            'users' => User::all(),
         ]);
     }
-    
 
     /**
      * Almacena un nuevo usuario (Cliente).
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-        ]);
-
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -43,5 +39,22 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('clients.index')->with('success', 'Cliente añadido correctamente.');
+    }
+
+
+    public function update(Request $request, User $user): RedirectResponse
+    {
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return redirect()->route('clients.index')->with('success', '✅ Cliente actualizado correctamente.');
+    }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return redirect()->route('clients.index')->with('success', 'Cliente eliminado.');
     }
 }
