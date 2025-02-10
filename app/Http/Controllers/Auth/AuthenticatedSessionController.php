@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Foundation\Application;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -54,5 +55,24 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function dashboard(): Response
+    {
+        return Inertia::render('Dashboard', [
+            'auth' => [
+                'user' => Auth::user(),
+                'roles' => Auth::user()?->getRoleNames() ?? [],
+            ],
+        ]);
+    }
+    public function welcome(): Response
+    {
+        return Inertia::render('Welcome', [
+            'canLogin' => Route::has('login'),
+            'canRegister' => Route::has('register'),
+            'laravelVersion' => Application::VERSION,
+            'phpVersion' => PHP_VERSION,
+        ]);
     }
 }

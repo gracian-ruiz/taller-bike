@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -16,18 +18,14 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [AuthenticatedSessionController::class, 'welcome']);
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Dashboard (requiere autenticación y verificación)
+Route::get('/dashboard', [AuthenticatedSessionController::class, 'dashboard'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -36,18 +34,13 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/test-inertia', function () {
-        // Verifica si el usuario tiene el rol de 'admin'
-        if (!auth()->user()->hasRole('admin')) {
-            abort(403, 'Acceso denegado');
-        }
-        
-        return Inertia::render('TestPage', [
-            'message' => 'Inertia está funcionando correctamente y todo correcto'
-        ]);
-    });
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/clients', [UserController::class, 'index'])->name('clients.index');
+    Route::post('/clients', [UserController::class, 'store'])->name('clients.store');
 });
+
+
+
 
 
 require __DIR__.'/auth.php';

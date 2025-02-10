@@ -69,7 +69,10 @@ class Kernel implements KernelContract
      *
      * @deprecated
      */
-    protected $routeMiddleware = [];
+    protected $routeMiddleware = [
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,  // ✅ Asegura que está registrado
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,  // ✅ Opcional
+    ];
 
     /**
      * The application's middleware aliases.
