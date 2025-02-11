@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useForm } from "@inertiajs/react";
+import { useForm, Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 
-export default function Index({ auth, bikes, users }) { // 🔹 Ahora recibimos `users`
+export default function Index({ auth, bikes, users }) {
     const [showForm, setShowForm] = useState(false);
     const { data, setData, post, processing, reset } = useForm({
         user_id: "",
@@ -22,7 +22,7 @@ export default function Index({ auth, bikes, users }) { // 🔹 Ahora recibimos 
     };
 
     return (
-        <AuthenticatedLayout user={auth.user}  roles={auth.roles}>
+        <AuthenticatedLayout user={auth.user} roles={auth.roles}>
             <div className="p-6 bg-white shadow-md rounded-md">
                 <h1 className="text-2xl font-bold mb-4">🚴‍♂️ Gestión de Bicicletas</h1>
 
@@ -35,7 +35,6 @@ export default function Index({ auth, bikes, users }) { // 🔹 Ahora recibimos 
 
                 {showForm && (
                     <form onSubmit={handleSubmit} className="bg-gray-100 p-4 rounded shadow-md">
-                        {/* Seleccionar Usuario */}
                         <div className="mb-3">
                             <label className="block font-medium text-gray-700">Asignar a Usuario</label>
                             <select
@@ -53,7 +52,6 @@ export default function Index({ auth, bikes, users }) { // 🔹 Ahora recibimos 
                             </select>
                         </div>
 
-                        {/* Nombre de la bicicleta */}
                         <div className="mb-3">
                             <label className="block font-medium text-gray-700">Nombre</label>
                             <input
@@ -65,7 +63,6 @@ export default function Index({ auth, bikes, users }) { // 🔹 Ahora recibimos 
                             />
                         </div>
 
-                        {/* Marca */}
                         <div className="mb-3">
                             <label className="block font-medium text-gray-700">Marca</label>
                             <input
@@ -77,7 +74,6 @@ export default function Index({ auth, bikes, users }) { // 🔹 Ahora recibimos 
                             />
                         </div>
 
-                        {/* Año Modelo */}
                         <div className="mb-3">
                             <label className="block font-medium text-gray-700">Año Modelo</label>
                             <input
@@ -103,6 +99,7 @@ export default function Index({ auth, bikes, users }) { // 🔹 Ahora recibimos 
                             <th className="border border-gray-300 p-2">Nombre</th>
                             <th className="border border-gray-300 p-2">Marca</th>
                             <th className="border border-gray-300 p-2">Año</th>
+                            <th className="border border-gray-300 p-2">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -112,6 +109,14 @@ export default function Index({ auth, bikes, users }) { // 🔹 Ahora recibimos 
                                 <td className="border border-gray-300 p-2">{bike.nombre}</td>
                                 <td className="border border-gray-300 p-2">{bike.marca}</td>
                                 <td className="border border-gray-300 p-2">{bike.anio_modelo}</td>
+                                <td className="border border-gray-300 p-2">
+                                    <Link
+                                        href={route("bikes.revisions.index", bike.id)}
+                                        className="bg-yellow-500 text-white px-2 py-1 rounded"
+                                    >
+                                        Revisiones
+                                    </Link>
+                                </td>
                             </tr>
                         ))}
                     </tbody>

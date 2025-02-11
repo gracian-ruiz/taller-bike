@@ -46,6 +46,16 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/bikes', [BikeController::class, 'index'])->name('bikes.index');
     Route::post('/bikes', [BikeController::class, 'store'])->name('bikes.store');
+});
+
+Route::middleware(['auth'])->group(function () {
+    // Página que muestra las revisiones de una bicicleta
+    Route::get('/bikes/{bike}/revisions', [RevisionController::class, 'index'])->name('bikes.revisions.index');
+
+    // Formulario para añadir una revisión
+    Route::get('/bikes/{bike}/revisions/create', [RevisionController::class, 'create'])->name('revisions.create');
+
+    // Guardar una nueva revisión
     Route::post('/bikes/{bike}/revisions', [RevisionController::class, 'store'])->name('revisions.store');
 });
 

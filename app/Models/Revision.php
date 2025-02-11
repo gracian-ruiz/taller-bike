@@ -9,7 +9,7 @@ class Revision extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['bike_id', 'fecha_revision', 'descripcion', 'proxima_revision'];
+    protected $fillable = ['bike_id', 'componente','fecha_revision', 'descripcion', 'proxima_revision'];
 
     public function bike()
     {
