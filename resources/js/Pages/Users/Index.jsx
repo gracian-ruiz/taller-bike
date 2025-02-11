@@ -20,7 +20,7 @@ export default function Index({ auth, users }) {
     };
 
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <AuthenticatedLayout user={auth.user} roles={auth.roles}>
             <div className="p-6 bg-white shadow-md rounded-md">
                 <h1 className="text-2xl font-bold mb-4">Gestión de Clientes</h1>
 
