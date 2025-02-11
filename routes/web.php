@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BikeController;
+use App\Http\Controllers\RevisionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,6 +42,13 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('/clients/{user}', [UserController::class, 'update'])->name('clients.update');
     Route::delete('/clients/{user}', [UserController::class, 'destroy'])->name('clients.destroy');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/bikes', [BikeController::class, 'index'])->name('bikes.index');
+    Route::post('/bikes', [BikeController::class, 'store'])->name('bikes.store');
+    Route::post('/bikes/{bike}/revisions', [RevisionController::class, 'store'])->name('revisions.store');
+});
+
 
 
 require __DIR__.'/auth.php';

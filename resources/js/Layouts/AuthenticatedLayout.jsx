@@ -33,6 +33,11 @@ export default function AuthenticatedLayout({ user, roles, header, children }) {
                                         Clientes
                                     </NavLink>
                                 )}
+                                                                {isAdmin && (
+                                    <NavLink href={route("bikes.index")} active={route().current("bikes.index")}>
+                                        Bicicletas
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 
