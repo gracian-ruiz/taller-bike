@@ -2,6 +2,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Link } from "@inertiajs/react";
 
 export default function Index({ auth, bike, revisions }) {
+    console.log("📋 Revisiones cargadas:", revisions);
     return (
         <AuthenticatedLayout user={auth.user} roles={auth.roles}>
             <div className="p-6 bg-white shadow-md rounded-md">
@@ -23,7 +24,10 @@ export default function Index({ auth, bike, revisions }) {
                     <tbody>
                         {revisions.map((revision) => (
                             <tr key={revision.id}>
-                                <td className="border border-gray-300 p-2">{revision.componente}</td>
+                                <td className="border border-gray-300 p-2">
+    {revision.componente ? revision.componente.nombre : "Sin componente"}
+</td>
+
                                 <td className="border border-gray-300 p-2">{revision.fecha_revision}</td>
                                 <td className="border border-gray-300 p-2">{revision.descripcion}</td>
                                 <td className="border border-gray-300 p-2">{revision.proxima_revision || "Sin definir"}</td>

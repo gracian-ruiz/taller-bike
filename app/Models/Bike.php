@@ -20,4 +20,10 @@ class Bike extends Model
     {
         return $this->hasMany(Revision::class);
     }
+
+    public function components()
+{
+    return $this->hasMany(Component::class);
+}
+
 }

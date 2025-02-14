@@ -6,9 +6,6 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 
 export default function AuthenticatedLayout({ user, roles, header, children }) {
-    console.log("🔍 Datos de usuario:", user);
-    console.log("🔍 Roles del usuario:", roles);
-
     const isAdmin = roles && roles.includes("admin");
 
     return (
@@ -38,6 +35,12 @@ export default function AuthenticatedLayout({ user, roles, header, children }) {
                                         Bicicletas
                                     </NavLink>
                                 )}
+                                {isAdmin && (
+                                    <NavLink href={route("components.index")} active={route().current("components.index")}>
+                                        Componentes
+                                    </NavLink>
+                                )}
+
                             </div>
                         </div>
 

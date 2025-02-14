@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BikeController;
+use App\Http\Controllers\ComponentController;
 use App\Http\Controllers\RevisionController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -58,6 +59,17 @@ Route::middleware(['auth'])->group(function () {
     // Guardar una nueva revisión
     Route::post('/bikes/{bike}/revisions', [RevisionController::class, 'store'])->name('revisions.store');
 });
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/components', [ComponentController::class, 'index'])->name('components.index');
+Route::get('/components/create', [ComponentController::class, 'create'])->name('components.create');
+Route::post('/components', [ComponentController::class, 'store'])->name('components.store');
+Route::get('/components/{component}/edit', [ComponentController::class, 'edit'])->name('components.edit');
+Route::put('/components/{component}', [ComponentController::class, 'update'])->name('components.update');
+Route::delete('/components/{component}', [ComponentController::class, 'destroy'])->name('components.destroy');
+});
+
 
 
 

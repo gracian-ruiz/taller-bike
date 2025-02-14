@@ -1,35 +1,29 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { useForm } from "@inertiajs/react";
+import { useForm, router } from "@inertiajs/react";
 
-export default function Create({ auth, bike }) {
+export default function Create({ auth, bike, componentes }) { // 🔹 Recibir `componentes`
     const { data, setData, post, processing, reset } = useForm({
-        bike_id: bike.id,  // 👈 Asegurar que se envía el ID de la bicicleta
-        componente: "",
+        bike_id: bike.id,
+        componente_id: "",  // Cambiamos `componente` a `componente_id`
         fecha_revision: "",
         descripcion: "",
         proxima_revision: "",
     });
-    
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        
+    
         post(route("revisions.store", { bike: bike.id }), {
             preserveScroll: true,
-            onSuccess: ({ props }) => {
-                console.log("✅ Revisión creada:", props.revision);
+            onSuccess: () => {
                 reset();
-                if (onRevisionAdded) {
-                    onRevisionAdded(props.revision); // 🔹 Agregar la revisión a la lista sin recargar
-                }
+                router.reload(); // 🔄 Recargar datos sin recargar la página
             },
             onError: (errors) => {
                 console.error("❌ Error en la creación de la revisión:", errors);
             },
         });
     };
-    
-    
-    
     
 
     return (
@@ -38,15 +32,22 @@ export default function Create({ auth, bike }) {
                 <h1 className="text-2xl font-bold mb-4">➕ Añadir Revisión para {bike.nombre}</h1>
 
                 <form onSubmit={handleSubmit} className="bg-gray-100 p-4 rounded shadow-md">
+                    {/* Seleccionar Componente */}
                     <div className="mb-3">
                         <label className="block font-medium text-gray-700">Componente Revisado</label>
-                        <input
-                            type="text"
+                        <select
                             className="w-full p-2 border rounded"
-                            value={data.componente}
-                            onChange={(e) => setData("componente", e.target.value)}
+                            value={data.componente_id}
+                            onChange={(e) => setData("componente_id", e.target.value)}
                             required
-                        />
+                        >
+                            <option value="">Selecciona un componente</option>
+                            {componentes.map((componente) => (
+                                <option key={componente.id} value={componente.id}>
+                                    {componente.nombre}
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div className="mb-3">
